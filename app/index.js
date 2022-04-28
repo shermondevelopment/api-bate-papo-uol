@@ -9,10 +9,14 @@ import express, { json } from 'express'
 /* mongodb connect */
 import connect from './setting/mongoose.js'
 
+/* routes */
+import routes from './routes/router.js'
+
 /* server */
 const app = express()
 app.use(json())
 app.use(cors())
+app.use(routes)
 
 /* start app */
 connect.then( connected => {
