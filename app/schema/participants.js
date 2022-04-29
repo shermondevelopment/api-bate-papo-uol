@@ -1,8 +1,10 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose from 'mongoose'
 
-const participantsSchema = new Schema({
+const participantsSchema = new mongoose.Schema({
   name: { type: String, required: true },
   lastStatus: { type: Date, default: Date.now() }
 })
 
-export default  mongoose.model('participants', participantsSchema)
+const participantsModel =  mongoose.model('participants', participantsSchema)
+
+export default participantsModel

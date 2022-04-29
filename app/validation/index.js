@@ -1,5 +1,5 @@
-import joi from 'joi'
+import Joi from 'joi'
 
-export const participantSchema = joi.object({
-  name: joi.string().required().error((errors) =>  new Error('o nome não pode ser vazio'))
+export const participantSchema = Joi.object({
+  name: Joi.string().required().error((errors) =>  new Error('o nome não pode ser vazio'))
 })
