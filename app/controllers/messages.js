@@ -32,3 +32,17 @@ export const addMessage = async (req, res) => {
     res.status(422).json(error.message)
   }
 }
+
+export const listMessage = async (req, res) => {
+  try {
+
+    const { user } = req.headers
+
+    const limit = parseInt(req.query.limit)
+
+    const participants = await messageModel.find({ $or: [{ to: 'Todos' }, { to: user }, {from: user}]}).limit(limit)
+    return res.status(200).json(participants)
+  } catch (error) {
+    res.status(422).json(error.message)
+  }
+}
