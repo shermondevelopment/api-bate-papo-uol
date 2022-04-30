@@ -4,8 +4,12 @@ import { Router } from 'express'
 const router = Router()
 
 /* controllers */
-import { participantsAdd  } from '../controllers/participants.js'
+import { participantsAdd, participantsList  } from '../controllers/participants.js'
 
+/* add participant */
 router.post('/participants', participantsAdd)
+
+/* list participants */
+router.get('/participants', participantsList)
 
 export default router

@@ -26,3 +26,12 @@ export const participantsAdd = async (req, res) => {
     res.status(422).json(error.message)
   }
 }
+
+export const participantsList = async (req, res) => {
+  try {
+    const listAllParticipants = await participantsModel.find()
+    res.status(200).send(listAllParticipants)
+  } catch (error) {
+    res.sendStatus(500)
+  }
+}
