@@ -26,7 +26,7 @@ export const addMessage = async (req, res) => {
       throw new Error('participant is not on the list')
     }
 
-    await messageModel.create({to, from, text, type, time: dayjs(new Date()).format('HH:mm:ss')})
+    await messageModel.create({to, from, text: text.replace(/<.*?>/g, ' ').trim(), type, time: dayjs(new Date()).format('HH:mm:ss')})
     res.sendStatus(201)
   } catch (error) {
     res.status(422).json(error.message)

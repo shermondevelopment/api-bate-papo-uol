@@ -12,12 +12,15 @@ import dayjs from 'dayjs'
 export const participantsAdd = async (req, res) => {
   try {
     await participantSchema.validateAsync(req.body)
-    const findParticipant = await participantsModel.findOne({ name: req.body.name })
+    /* sanatize name */
+    const username = req.body.name.replace(/<.*?>/g, ' ').trim()
+
+    const findParticipant = await participantsModel.findOne({ name: username })
     if(findParticipant) {
       return res.status(409).send('o usuário já existe')
     }
 
-    await messageModel.create({ from: req.body.name, to: 'Todos', text: 'entra na sala...', type: 'status', time: dayjs(new Date()).format('HH:mm:ss') })
+    await messageModel.create({ from: username, to: 'Todos', text: 'entra na sala...', type: 'status', time: dayjs(new Date()).format('HH:mm:ss') })
 
     await participantsModel.create({...req.body, lastStatus: Date.now()})
     res.sendStatus(201)
