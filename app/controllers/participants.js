@@ -17,8 +17,7 @@ export const participantsAdd = async (req, res) => {
       return res.status(409).send('o usuário já existe')
     }
 
-    await messageModel.create({ from: 'xxx', to: 'Todos', text: 'entra na sala...', type: 'status', time: dayjs(new Date()).format('HH:mm:ss') })
-
+    await messageModel.create({ from: req.body.name, to: 'Todos', text: 'entra na sala...', type: 'status', time: dayjs(new Date()).format('HH:mm:ss') })
 
     await participantsModel.create(req.body)
     res.sendStatus(201)
