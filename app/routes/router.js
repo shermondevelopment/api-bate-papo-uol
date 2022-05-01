@@ -14,7 +14,7 @@ router.post('/participants', participantsAdd)
 router.get('/participants', participantsList)
 
 /* add messages */
-router.post('/message', addMessage)
+router.post('/messages', addMessage)
 
 /* list message */
 router.get('/messages', listMessage)

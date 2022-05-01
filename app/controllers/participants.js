@@ -12,14 +12,14 @@ import dayjs from 'dayjs'
 export const participantsAdd = async (req, res) => {
   try {
     await participantSchema.validateAsync(req.body)
-    const findParticipant = await participantsModel.findOne({ name: req.body.name})
+    const findParticipant = await participantsModel.findOne({ name: req.body.name })
     if(findParticipant) {
       return res.status(409).send('o usuário já existe')
     }
 
     await messageModel.create({ from: req.body.name, to: 'Todos', text: 'entra na sala...', type: 'status', time: dayjs(new Date()).format('HH:mm:ss') })
 
-    await participantsModel.create(req.body)
+    await participantsModel.create({...req.body, lastStatus: Date.now()})
     res.sendStatus(201)
   } catch (error) {
     res.status(422).json(error.message)
@@ -34,3 +34,18 @@ export const participantsList = async (req, res) => {
     res.sendStatus(500)
   }
 }
+
+export const removeParticipants = async () => {
+  try {
+    const dateNext = Date.now() - 10000;
+    const findParticipnatsInactive = await participantsModel.find({ lastStatus: { $lt: new Date(dateNext)  } })
+    findParticipnatsInactive.forEach( async (removedParticipant) => {
+      await participantsModel.deleteOne({ _id: removedParticipant._id })
+      await messageModel.create({ from: removedParticipant.name, to: 'Todos', text: 'sai da sala...', type: 'status', time: dayjs(new Date()).format('HH:mm:ss')  })
+    } )
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+removeParticipants()

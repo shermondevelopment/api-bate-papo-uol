@@ -6,7 +6,6 @@ export const status = async (req, res) => {
     const { user } = req.headers
 
     const participants = await participantsModel.findOne({ name: user })
-
     if(!participants) {
       return res.sendStatus(404)
     }
