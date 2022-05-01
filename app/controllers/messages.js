@@ -46,3 +46,26 @@ export const listMessage = async (req, res) => {
     res.status(422).json(error.message)
   }
 }
+
+export const deleteMessage = async (req, res) => {
+  try {
+    const { user } = req.headers
+    const { id } = req.params
+
+    const existMessage = await messageModel.findOne({ _id: id })
+
+    if(!existMessage) {
+      return res.sendStatus(404)
+    }
+    
+    if(existMessage.from !== user) {
+      return res.sendStatus(401)
+    }
+
+    await messageModel.deleteOne({ _id: existMessage._id })
+    res.sendStatus(200)
+
+  } catch(error) {
+    res.status(500).send('internal server error')
+  }
+}
