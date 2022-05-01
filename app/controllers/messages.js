@@ -6,7 +6,7 @@ import messageModel from '../schema/messages.js'
 import participantsModel from '../schema/participants.js'
 
 /* schema validation */
-import { messagesSchema } from '../validation/index.js'
+import { validInputMessages } from '../validation/index.js'
 
 
 export const addMessage = async (req, res) => {
@@ -14,13 +14,9 @@ export const addMessage = async (req, res) => {
     const { to, text, type } = req.body
     const { user:from } = req.headers
 
-    await messagesSchema.validateAsync({ to, from, type, text })
+    await validInputMessages(['message', 'private_message']).validateAsync({ to, from, type, text })
 
     const findParticipant = await participantsModel.findOne({ name: from })
-
-    if(type !== 'message' && type !== 'private_message') {
-      throw new Error('type can only be message our private_message')
-    }
 
     if(!findParticipant) {
       throw new Error('participant is not on the list')
@@ -67,5 +63,31 @@ export const deleteMessage = async (req, res) => {
 
   } catch(error) {
     res.status(500).send('internal server error')
+  }
+}
+
+export const updateMessage = async (req, res) => {
+  try {
+
+    const { to, text, type } = req.body
+    const { user: from} = req.headers
+    const { id } = req.params
+
+    await validInputMessages(['message', 'private_message']).validateAsync({ to, text, type, from })
+
+    const messageExists = await messageModel.findOne({ _id: id  })
+
+    if(!messageExists) {
+      return res.sendStatus(404)
+    }
+
+    if(messageExists.from !== from) {
+      return res.sendStatus(401)
+    }
+
+    const updated = await messageModel.updateOne({ _id: messageExists._id }, { ...req.body })
+
+  } catch (error) {
+    res.sendStatus(422)
   }
 }

@@ -5,7 +5,7 @@ const router = Router()
 
 /* controllers */
 import { participantsAdd, participantsList  } from '../controllers/participants.js'
-import { addMessage, listMessage, deleteMessage } from '../controllers/messages.js'
+import { addMessage, listMessage, deleteMessage, updateMessage } from '../controllers/messages.js'
 import { status } from '../controllers/status.js'
 /* add participant */
 router.post('/participants', participantsAdd)
@@ -24,5 +24,8 @@ router.post('/status', status)
 
 /* deleted message */
 router.delete('/messages/:id', deleteMessage)
+
+/* updated message */
+router.put('/messages/:id', updateMessage)
 
 export default router
