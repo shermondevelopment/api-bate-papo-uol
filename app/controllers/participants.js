@@ -50,5 +50,3 @@ export const removeParticipants = async () => {
     console.log(error)
   }
 }
-
-removeParticipants()
