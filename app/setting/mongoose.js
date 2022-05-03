@@ -1,3 +1,3 @@
 import mongoose from 'mongoose'
 
-export default mongoose.connect('mongodb://localhost:27017/uol-driven')
+export default mongoose.connect(process.env.MONGOOSE_URI)
